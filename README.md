@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.com/matt-palmer-tfs/osrs_highscores.svg?branch=master)](https://travis-ci.com/matt-palmer-tfs/osrs_highscores)
 # osrs_highscores
 
 ## Project Purpose
