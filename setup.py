@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="osrs_highscores",
-    version="0.1.2a1",
+    version="0.1.2a3",
     author="Matthew Palmer",
     author_email="palmer.matthew167@gmail.com",
     description="Simple Wrapper for the OSRS Highscores",

@@ -3,36 +3,88 @@ from .categories import ranking_dict
 
 
 class Highscores(object):
+    """Highscores
+
+    This class obtains and formats the data requested from the runescape Highscores for OldSchool
+
+    Args:
+        username str: Target Username for Account
+        target   str: The target Highscores to lookup username. Defaults to `default`
+                  - Accepted Values: [default, ironman, ultamite, hardcore_ironman, seasonal, tournament, deadman]
+
+    Returns:
+        None
+
+    """
     def __init__(self, username, target='default'):
         self.username = username
         self.target = target
         self.base_url = 'https://secure.runescape.com'
+        self.target_url = self._request_build()
         self.skill = dict()
         self.minigame = dict()
         self.boss = dict()
-        self.instantiate()
+        self._instantiate()
 
-    def format_url(self, target_path):
+    def _format_url(self, target_path):
+        """_format_url
+
+        Creates the Fully Qualified URL for highscores lookup request.
+
+        Args:
+            self
+            target_path str: Unique string based on the available highscore gamemode paths
+
+        Returns:
+            url str: Fully Qualified URL for highscores lookup
+
+        """
         url = "{}/m={}/index_lite.ws?player={}".format(self.base_url, target_path, self.username)
         return url
 
-    def request_build(self):
-        if self.target == 'default':
-            return self.format_url("hiscore_oldschool")
-        elif self.target == 'ironman':
-            return self.format_url("hiscore_oldschool_ironman")
-        elif self.target == 'ultimate':
-            return self.format_url("hiscore_oldschool_ultimate")
-        elif self.target == 'seasonal':
-            return self.format_url("hiscore_oldschool_seasonal")
-        elif self.target == 'deadman':
-            return self.format_url("hiscore_oldschool_deadman")
-        elif self.target == 'tournament':
-            return self.format_url("hiscore_oldschool_tournament")
-        else:
-            raise Exception('Invalid target param for Highsores Instance.')
+    def _request_build(self):
+        """_request_build
 
-    def process_data(self):
+        *Internal Method* Returns URI for highscores path. Used for self.target_url value Formulation.
+
+        Args:
+            self
+
+        Returns:
+            self._format_url Pointer with provided Value from if/else self.target param.
+        """
+        if self.target == 'default':
+            return self._format_url("hiscore_oldschool")
+        elif self.target == 'ironman':
+            return self._format_url("hiscore_oldschool_ironman")
+        elif self.target == 'ultimate':
+            return self._format_url("hiscore_oldschool_ultimate")
+        elif self.target == 'hardcore_ironman':
+            return self._format_url("hiscore_oldschool_hardcore_ironman")
+        elif self.target == 'seasonal':
+            return self._format_url("hiscore_oldschool_seasonal")
+        elif self.target == 'deadman':
+            return self._format_url("hiscore_oldschool_deadman")
+        elif self.target == 'tournament':
+            return self._format_url("hiscore_oldschool_tournament")
+        else:
+            raise ValueError('Invalid target param for Highscores Instance.')
+
+    def _process_data(self):
+        """_process_data
+
+        Formats the returned raw string value into consumable self.* attributes
+        self.skill
+        self.minigame
+        self.boss
+
+        Args:
+            self
+
+        Returns:
+            None
+
+        """
         if not self.data:
             raise ValueError("No data loaded!")
         count = 0
@@ -66,9 +118,29 @@ class Highscores(object):
         self.minigame = minigame
         self.boss = boss
 
-    def instantiate(self):
-        self.data = requests.get(self.request_build()).content.decode('utf-8').split('\n')
-        self.process_data()
+    def _instantiate(self):
+        """_instantiate
+
+        Runs a full query and process request on the target URL for username/target provided.
+
+        Args:
+            self
+
+        Returns:
+            None
+        """
+        self.data = requests.get(self.target_url).content.decode('utf-8').split('\n')
+        self._process_data()
 
     def update(self):
-        self.instantiate()
+        """update
+
+        Updates existing information by making a new request to the OSRS Highscores
+
+        Args:
+            self
+
+        Returns:
+            None
+        """
+        self._instantiate()

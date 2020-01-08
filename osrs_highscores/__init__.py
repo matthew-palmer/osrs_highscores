@@ -1,0 +1,1 @@
+from .highscores import Highscores
