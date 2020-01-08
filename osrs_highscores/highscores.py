@@ -1,4 +1,5 @@
 import requests
+import time
 from .categories import ranking_dict
 
 
@@ -85,7 +86,7 @@ class Highscores(object):
             None
 
         """
-        if not self.data:
+        if len(self.data) < 78:
             raise ValueError("No data loaded!")
         count = 0
         skill = dict()
@@ -130,6 +131,7 @@ class Highscores(object):
             None
         """
         self.data = requests.get(self.target_url).content.decode('utf-8').split('\n')
+        self.time = time.time()
         self._process_data()
 
     def update(self):

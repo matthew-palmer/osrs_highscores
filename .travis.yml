@@ -1,0 +1,21 @@
+language: python
+python:
+  - 3.6
+install:
+  - pip install -r requirements.txt
+  - pip install .
+script: pytest
+before_deploy:
+  - git config --global user.email "builds@travis-ci.com"
+  - git config --global user.name "Travis CI"
+  - export TRAVIS_TAG=0.1.3a$TRAVIS_BUILD_NUMBER
+  - git tag $TRAVIS_TAG
+  - git push --tags
+deploy:
+  provider: pypi
+  user: __token__
+  password:
+    secure: sRAmY0BhlF0LprTMvVjt447l9SFUjFeHVIFKbCMmnFyrjgfbUJ3NUyiIVl6umCQX4YpUXlph8aLu9o7ExGqbPCO7OjHkcSE6HgH/sjj1P5ocDWnd7JmHfHpNAMR2Yix1iDw8F6mOW9YwFo8O0xET+1kN11UaLWsRWDvTeKOuEthpdZwYUkVQTicsJXSaApp5+KHyh+nvzLqZ5T8v9AM7lYzyrFt2nhjFmibz3qs488suSAuXrOWxyrYAVxtdVDW8UwGnC+MJr1rHAkT95R5/7TpkqiczcSjFVG1TdjJ5BseDiPHiO3CTyi5o/4wcHb8OZQzW6h2e4/TvD71aJYQmjNixJo2w+AKMC6qL8w0PSlc8F0wn44vj9y1xdApy+D+lM5SAjax980DmUMMtxCttAcUILLk5ywb9Mb9aQhaKZ4pj96m/VJ3xKtauNiaOYgMyeif6iSPMv2g2A8j4ifd/t3c55RC1/Iyw/ACSZzFw3niOvpP6tVnx6RV6AfYDVa9zf07wp07jUF5aUQ5nOp+sRigYAIigL7frffll18FrVVrQSo7r0BRbCpQow1tyTQB07sGNQBcj9/pYH6CqjTYVYm7IIGbu56JYovGqx06Yo9eSCsc3y6jYxogoTCokAITeUsrbisUD+a2LxR2ow3yknn8xItHkTFDqg0BVQHtv9Fo=
+  on:
+    branch: master
+  skip_existing: true
