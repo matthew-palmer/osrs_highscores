@@ -10,7 +10,6 @@ before_deploy:
   - git config --global user.name "Travis CI"
   - export TRAVIS_TAG=0.1.3a$TRAVIS_BUILD_NUMBER
   - git tag $TRAVIS_TAG
-  - git push --tags
 deploy:
   provider: pypi
   user: __token__
