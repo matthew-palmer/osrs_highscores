@@ -10,11 +10,6 @@ about = {}
 with open(os.path.join(here, 'osrs_highscores', '__version__.py'), 'r') as f:
     exec(f.read(), about)
 
-requirements = []
-with open('requirements.txt', 'r') as fr:
-    requirements = [line.rstrip('\n') for line in fr]
-
-
 setuptools.setup(
     name=about['__title__'],
     version=about['__version__'],
@@ -32,5 +27,7 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
-    install_requires=requirements,
+    install_requires=[
+        'requests==2.22.0',
+    ]
 )
