@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.com/matt-palmer-tfs/osrs_highscores.svg?branch=master)](https://travis-ci.com/matt-palmer-tfs/osrs_highscores)
+![types](https://img.shields.io/badge/python-3.6%2B-yellow)
 # osrs_highscores
 
 ## Project Purpose

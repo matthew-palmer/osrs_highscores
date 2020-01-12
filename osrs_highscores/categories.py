@@ -85,27 +85,74 @@ default_boss_ranks = [
     "zulrah",
 ]
 
-default_list = default_skills + default_optional_ranks + default_boss_ranks
+default_list = default_optional_ranks + default_boss_ranks
 
-ranking_dict = dict()
-count = 0
+skill_dict = dict()
+alt_dict = dict()
+skill_count = 0
 for entry in default_skills:
-    ranking_dict[count] = {
+    skill_dict[skill_count] = {
         "type": "skill",
         "name": entry
     }
-    count += 1
+    skill_count += 1
 
+alt_count = 0
 for entry in default_optional_ranks:
-    ranking_dict[count] = {
+    alt_dict[alt_count] = {
         "type": "minigame",
         "name": entry
     }
-    count += 1
+    alt_count += 1
 
 for entry in default_boss_ranks:
-    ranking_dict[count] = {
+    alt_dict[alt_count] = {
         "type": "boss",
         "name": entry
     }
-    count += 1
+    alt_count += 1
+
+
+class OSRSInfo (object):
+    def __init__(self):
+        self.index = skill_dict
+        self.index_inverse = self.inverse_dict(self.index)
+        self.alt_index = alt_dict
+        self.alt_index_inverse = self.inverse_dict(self.alt_index)
+
+    @staticmethod
+    def inverse_dict(target_dict):
+        info = dict()
+        for key, value in target_dict.items():
+            info[value["name"]] = key
+        return info
+
+
+class OSRSRank(object):
+    def __init__(self, username, rank_type, **kwargs):
+        self.username = username
+        self.type = rank_type
+        self._instantiate(**kwargs)
+
+    def _is_skill(self, **kwargs):
+        try:
+            self.xp = kwargs.get('xp')
+            self.level = kwargs.get('level')
+            self.skill = kwargs.get('skill')
+        except Exception as err:
+            raise err
+
+    def _is_non_skill(self, **kwargs):
+        try:
+            self.score = kwargs.get('score')
+        except Exception as err:
+            raise err
+
+    def _instantiate(self, **kwargs):
+        self.rank = kwargs.get('rank')
+        if self.type == 'skill':
+            self._is_skill(**kwargs)
+        elif self.type == 'nonskill':
+            self._is_non_skill(**kwargs)
+        else:
+            raise ValueError('Target type is not a valid identifier (skill/nonskill')
