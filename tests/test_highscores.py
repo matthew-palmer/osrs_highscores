@@ -3,12 +3,12 @@ from osrs_highscores.highscores import Highscores
 
 
 def test_lookup():
-    user = Highscores('Zezima')
-    assert user.skill['overall']['level'] != 0
+    user = Highscores('Lynx Titan')
+    assert user.skill['strength']['level'] == 99
 
 
 def test_update():
-    user = Highscores('Zezima')
+    user = Highscores('Lynx Titan')
     original_query = user.time
     user.update()
     new_query = user.time
@@ -17,7 +17,7 @@ def test_update():
 
 def test_target_not_exist():
     with pytest.raises(ValueError):
-        user = Highscores('Zezima', target='ironman')
+        Highscores('Lynx Titan', target='ironman')
 
 
 def test_target_exists():
