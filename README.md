@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.com/matt-palmer-tfs/osrs_highscores.svg?branch=master)](https://travis-ci.com/matt-palmer-tfs/osrs_highscores)
+![types](https://img.shields.io/badge/python-3.6%2B-yellow)
 # osrs_highscores
 
 ## Project Purpose
@@ -17,6 +18,8 @@ python -m pip install osrs_highscores --upgrade
 ```
 
 ### Basic Usage
+
+#### Highscores
 ```
 >>> from osrs_highsores import Highscores
 
@@ -33,5 +36,18 @@ python -m pip install osrs_highscores --upgrade
 
 # Update existing data of object
 user.update()
+
+```
+
+#### Rankings
+*The OSRS API does not have a specific endpoint, so queries using ranks is done with bs4 and scraping the UI result.*
+*Implementation of this Function may not work on all systems if you have issues with bs4.*
+```
+>>> from osrs_highscores import Rankings
+
+>>> ranks = Rankings()
+>>> attack_top = ranks.get_rank_in_skill('attack', 1)
+>>> print(attack_top.__dict__)
+{'username': 'Heur', 'type': 'skill', 'rank': 1, 'xp': '200,000,000', 'level': '99', 'skill': 'attack'}
 
 ```
