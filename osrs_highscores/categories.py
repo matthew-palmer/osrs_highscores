@@ -89,27 +89,36 @@ default_list = default_optional_ranks + default_boss_ranks
 
 skill_dict = dict()
 alt_dict = dict()
-skill_count = 0
+ranking_dict = dict()
+count = 0
 for entry in default_skills:
-    skill_dict[skill_count] = {
+    info = {
         "type": "skill",
         "name": entry
     }
-    skill_count += 1
+    skill_dict[count] = info
+    ranking_dict[count] = info
+    count += 1
 
 alt_count = 0
 for entry in default_optional_ranks:
-    alt_dict[alt_count] = {
+    info = {
         "type": "minigame",
         "name": entry
     }
+    alt_dict[alt_count] = info
+    ranking_dict[count] = info
+    count += 1
     alt_count += 1
 
 for entry in default_boss_ranks:
-    alt_dict[alt_count] = {
+    info = {
         "type": "boss",
         "name": entry
     }
+    alt_dict[alt_count] = info
+    ranking_dict[count] = info
+    count += 1
     alt_count += 1
 
 

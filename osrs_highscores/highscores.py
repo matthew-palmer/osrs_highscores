@@ -1,6 +1,6 @@
 import requests
 import time
-from .categories import skill_dict, alt_dict
+from .categories import ranking_dict
 from .base import OSRSBase
 
 
@@ -50,34 +50,30 @@ class Highscores(OSRSBase):
         boss = dict()
 
         count = 0
-        for _ in skill_dict:
+        for _ in ranking_dict:
             data = self.data[count].split(',')
 
-            if skill_dict[count]['type'] == 'skill':
+            if ranking_dict[count]['type'] == 'skill':
                 info = {
                     'rank': data[0],
                     'level': data[1],
                     'experience': data[2],
                 }
-                skill[skill_dict[count]['name']] = info
-            count += 1
-
-        count = 0
-        for _ in alt_dict:
-            data = self.data[count].split(',')
-            if alt_dict[count]['type'] == 'minigame':
+                skill[ranking_dict[count]['name']] = info
+            elif ranking_dict[count]['type'] == 'minigame':
                 info = {
                     'rank': data[0],
                     'amount': data[1],
                 }
-                minigame[alt_dict[count]['name']] = info
-            elif alt_dict[count]['type'] == 'boss':
+                minigame[ranking_dict[count]['name']] = info
+            elif ranking_dict[count]['type'] == 'boss':
                 info = {
                     'rank': data[0],
                     'kills': data[1],
                 }
-                boss[alt_dict[count]['name']] = info
+                boss[ranking_dict[count]['name']] = info
             count += 1
+
         self.skill = skill
         self.minigame = minigame
         self.boss = boss
