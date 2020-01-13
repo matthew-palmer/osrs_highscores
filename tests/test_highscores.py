@@ -4,7 +4,7 @@ from osrs_highscores.highscores import Highscores
 
 def test_lookup():
     user = Highscores('Lynx Titan')
-    assert user.skill['strength']['level'] == 99
+    assert int(user.skill['strength']['level']) == 99
 
 
 def test_update():
@@ -22,4 +22,4 @@ def test_target_not_exist():
 
 def test_target_exists():
     user = Highscores('dids', target='ironman')
-    assert user.skill['overall']['level'] != 0
+    assert int(user.skill['overall']['level']) != 0
