@@ -1,4 +1,13 @@
+from .categories import default_list
 
+
+def with_get_attr(cls):
+    for entry in default_list:
+        setattr(cls, entry, dict())
+    return cls
+
+
+@with_get_attr
 class OSRSBase(object):
     def __init__(self, target="default"):
         self.base_url = "https://secure.runescape.com"

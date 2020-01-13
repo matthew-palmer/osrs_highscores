@@ -1,5 +1,6 @@
 import requests
 import time
+from addict import Dict
 from .categories import ranking_dict
 from .base import OSRSBase
 
@@ -26,6 +27,8 @@ class Highscores(OSRSBase):
         self.minigame = dict()
         self.boss = dict()
         self._instantiate()
+        # Exposes all values as top level attributes
+        self.__dict__ = Dict(dict(**self.skill, **self.minigame, **self.boss, **self.__dict__))
 
     def _process_data(self):
         """_process_data
