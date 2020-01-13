@@ -42,7 +42,7 @@ class Rankings(OSRSBase):
         table_string = "{}&page={}".format(table, rank_page)
         target_url = self._request_build(table=table_string)
         response = requests.get(target_url).content
-        bs = BeautifulSoup(response, features="lxml")
+        bs = BeautifulSoup(response, "html.parser")
         rows = bs.find("table").find("tbody").findAll("tr")
         for row in rows:
             cells = row.findAll("td")
@@ -77,7 +77,7 @@ class Rankings(OSRSBase):
         category_string = "1&table={}&page={}".format(table, rank_page)
         target_url = self._request_build(category_type=category_string)
         response = requests.get(target_url).content
-        bs = BeautifulSoup(response, features="lxml")
+        bs = BeautifulSoup(response, "html.parser")
         rows = bs.find("table").find("tbody").findAll("tr")
         for row in rows:
             cells = row.findAll("td")
