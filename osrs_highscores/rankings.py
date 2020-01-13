@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
+import time
 from .categories import OSRSInfo, OSRSRank
 from .base import OSRSBase
 
@@ -32,6 +33,10 @@ class Rankings(OSRSBase):
         Returns:
             OSRSRank object
         """
+        # Enforced sleep between calls, as this will hit the direct UI page and scrape information
+        # Only added to avoid any implementations that may hurt the OSRS servers with load
+        time.sleep(0.5)
+
         table = OSRSInfo().index_inverse[skill]
         rank_page = int(float(rank/25))
         table_string = "{}&page={}".format(table, rank_page)
@@ -63,6 +68,10 @@ class Rankings(OSRSBase):
         Returns:
             OSRSRank object
         """
+        # Enforced sleep between calls, as this will hit the direct UI page and scrape information
+        # Only added to avoid any implementations that may hurt the OSRS servers with load
+        time.sleep(0.5)
+
         table = OSRSInfo().alt_index_inverse[target]
         rank_page = int(float(rank / 25))
         category_string = "1&table={}&page={}".format(table, rank_page)
