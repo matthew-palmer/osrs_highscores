@@ -59,12 +59,53 @@ Heur
 #### Highscores Attributes
 Table of all available attributes for highscores object
 
+##### Advanced Use
+In the list below, the following are exposed as top level attributes for the return for processing/use.
+
+- user.*skill (e.g. attack, runecraft, herblore)
+    - rank
+    - level
+    - xp
+- user.*minigame (e.g. clue_scrolls_easy, lms_rank, bounty_hunter_hunter)
+    - rank
+    - score
+- user.*boss (e.g. chaos_elemental, hespori, the_gauntlet)
+    - rank
+    - kills
+
+###### Example
+````
+user = Highscores('Lynx Titan')
+print("Lynx_titan:\n"
+      "Attack %s overall: %s\n"
+      "Dag Rex Kills: %s\n"
+      "All Clues Completed: %s\n"
+      "All Clues Rank: %s" % (
+           user.attack.level,
+           user.overall,
+           user.dagannoth_rex.kills,
+           user.clue_scrolls_all.score,
+           user.clue_scrolls_all.rank))
+````
+Output
+```
+Lynx_titan:
+Attack 99 overall: {'rank': '1', 'level': '2277', 'xp': '4600000000'}
+Dag Rex Kills: -1
+All Clues Completed: 22
+All Clues Rank: 433023
+```
+
+###### Reference Table
 *Ref # is the associated osrs_highscores dict index number*
 
 *Table # is the associated OSRS highscores URL reference lookup query param*
 
 - Category=0 assumed for skill refs. 
 - Category=1 for all nonskills. 
+
+
+
 
 |Attribute Name|Ref #|Table # (relative to category)|
 |---|---|---|
@@ -79,7 +120,7 @@ Table of all available attributes for highscores object
 |cooking|8|8|
 |woodcutting|9|9|
 |fletching|10|10|
-|"fishing|11|11|
+|fishing|11|11|
 |firemaking|12|12|
 |crafting|13|13|
 |smithing|14|14|

@@ -60,13 +60,13 @@ class Highscores(OSRSBase):
                 info = {
                     'rank': data[0],
                     'level': data[1],
-                    'experience': data[2],
+                    'xp': data[2],
                 }
                 skill[ranking_dict[count]['name']] = info
             elif ranking_dict[count]['type'] == 'minigame':
                 info = {
                     'rank': data[0],
-                    'amount': data[1],
+                    'score': data[1],
                 }
                 minigame[ranking_dict[count]['name']] = info
             elif ranking_dict[count]['type'] == 'boss':
