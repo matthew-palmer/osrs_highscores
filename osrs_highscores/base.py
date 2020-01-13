@@ -14,8 +14,8 @@ class OSRSBase(object):
         self.target = target
         self.index = "index_lite.ws"
 
-    def _format_url(self, target_path, **kwargs):
-        """_format_url
+    def __format_url(self, target_path, **kwargs):
+        """__format_url
 
         Creates the Fully Qualified URL for highscores lookup request.
 
@@ -33,8 +33,8 @@ class OSRSBase(object):
 
         return url
 
-    def _request_build(self, **kwargs):
-        """_request_build
+    def __request_build(self, **kwargs):
+        """__request_build
 
         *Internal Method* Returns URI for highscores path. Used for self.target_url value Formulation.
 
@@ -45,18 +45,18 @@ class OSRSBase(object):
             self._format_url Pointer with provided Value from if/else self.target param.
         """
         if self.target == 'default':
-            return self._format_url("hiscore_oldschool", **kwargs)
+            return self.__format_url("hiscore_oldschool", **kwargs)
         elif self.target == 'ironman':
-            return self._format_url("hiscore_oldschool_ironman", **kwargs)
+            return self.__format_url("hiscore_oldschool_ironman", **kwargs)
         elif self.target == 'ultimate':
-            return self._format_url("hiscore_oldschool_ultimate", **kwargs)
+            return self.__format_url("hiscore_oldschool_ultimate", **kwargs)
         elif self.target == 'hardcore_ironman':
-            return self._format_url("hiscore_oldschool_hardcore_ironman", **kwargs)
+            return self.__format_url("hiscore_oldschool_hardcore_ironman", **kwargs)
         elif self.target == 'seasonal':
-            return self._format_url("hiscore_oldschool_seasonal", **kwargs)
+            return self.__format_url("hiscore_oldschool_seasonal", **kwargs)
         elif self.target == 'deadman':
-            return self._format_url("hiscore_oldschool_deadman", **kwargs)
+            return self.__format_url("hiscore_oldschool_deadman", **kwargs)
         elif self.target == 'tournament':
-            return self._format_url("hiscore_oldschool_tournament", **kwargs)
+            return self.__format_url("hiscore_oldschool_tournament", **kwargs)
         else:
             raise ValueError('Invalid target param for Highscores Instance.')

@@ -22,16 +22,16 @@ class Highscores(OSRSBase):
     def __init__(self, username, target='default'):
         super(Highscores, self).__init__(target)
         self.username = username
-        self.target_url = self._request_build(player=username)
+        self.target_url = self._OSRSBase__request_build(player=username)
         self.skill = dict()
         self.minigame = dict()
         self.boss = dict()
-        self._instantiate()
+        self.__instantiate()
         # Exposes all values as top level attributes
         self.__dict__ = Dict(dict(**self.skill, **self.minigame, **self.boss, **self.__dict__))
 
-    def _process_data(self):
-        """_process_data
+    def __process_data(self):
+        """__process_data
 
         Formats the returned raw string value into consumable self.* attributes
         self.skill
@@ -81,8 +81,8 @@ class Highscores(OSRSBase):
         self.minigame = minigame
         self.boss = boss
 
-    def _instantiate(self):
-        """_instantiate
+    def __instantiate(self):
+        """__instantiate
 
         Runs a full query and process request on the target URL for username/target provided.
 
@@ -94,7 +94,7 @@ class Highscores(OSRSBase):
         """
         self.data = requests.get(self.target_url).content.decode('utf-8').split('\n')
         self.time = time.time()
-        self._process_data()
+        self.__process_data()
 
     def update(self):
         """update
@@ -107,4 +107,4 @@ class Highscores(OSRSBase):
         Returns:
             None
         """
-        self._instantiate()
+        self.__instantiate()
