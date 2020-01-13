@@ -35,7 +35,7 @@ class Rankings(OSRSBase):
         """
         # Enforced sleep between calls, as this will hit the direct UI page and scrape information
         # Only added to avoid any implementations that may hurt the OSRS servers with load
-        time.sleep(0.5)
+        time.sleep(0.1)
 
         table = OSRSInfo().index_inverse[skill]
         rank_page = int(float(rank/25))
@@ -70,7 +70,7 @@ class Rankings(OSRSBase):
         """
         # Enforced sleep between calls, as this will hit the direct UI page and scrape information
         # Only added to avoid any implementations that may hurt the OSRS servers with load
-        time.sleep(0.5)
+        time.sleep(0.1)
 
         table = OSRSInfo().alt_index_inverse[target]
         rank_page = int(float(rank / 25))
