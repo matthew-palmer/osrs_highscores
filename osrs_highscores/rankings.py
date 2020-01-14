@@ -1,8 +1,76 @@
 from bs4 import BeautifulSoup
 import requests
 import time
-from .categories import OSRSInfo, OSRSRank
+from .categories import OSRSInfo
 from .base import OSRSBase
+
+
+class OSRSRank(object):
+    """OSRSRank
+
+    This is a placeholder class for information from a target rank. Returns from Ranking class
+
+    Args:
+        username  str: Username of Account at rank
+        rank_type str: skill/nonskill identifier
+        **kwargs: Additional keywords for attributes to be applied.
+
+    """
+    def __init__(self, username, rank_type, **kwargs):
+        self.username = username
+        self.type = rank_type
+        self.__instantiate(**kwargs)
+
+    def __is_skill(self, **kwargs):
+        """__is_skill
+
+        Method to set information relative to a target Skill instance
+
+        Args:
+            **kwargs : Keyword args relative to skill (xp, level and skill)
+
+        Returns:
+            None
+        """
+        try:
+            self.xp = kwargs.get('xp').replace(',', '')
+            self.level = kwargs.get('level')
+            self.skill = kwargs.get('skill')
+        except Exception as err:
+            raise err
+
+    def __is_non_skill(self, **kwargs):
+        """__is_non_skill
+
+        Method to set information relative to target nonskill instance
+
+        Args:
+            **kwargs :  Keyword args relative to nonskill (score, type)
+
+        Returns:
+            None
+        """
+        try:
+            self.score = kwargs.get('score').replace(',', '')
+            self.type = kwargs.get('type')
+        except Exception as err:
+            raise err
+
+    def __instantiate(self, **kwargs):
+        """__instantiate
+
+        Method to select population method for object instance based on self.type
+
+        Args:
+            **kwargs : Keyword args relative to target instance of Rank (skill/nonskill)
+        """
+        self.rank = kwargs.get('rank')
+        if self.type == 'skill':
+            self.__is_skill(**kwargs)
+        elif self.type == 'nonskill':
+            self.__is_non_skill(**kwargs)
+        else:
+            raise ValueError('Target type is not a valid identifier (skill/nonskill')
 
 
 class Rankings(OSRSBase):
@@ -40,7 +108,7 @@ class Rankings(OSRSBase):
         table = OSRSInfo().index_inverse[skill]
         rank_page = int(float(((rank - 1) / 25) + 1))
         table_string = "{}&page={}".format(table, rank_page)
-        target_url = self._request_build(table=table_string)
+        target_url = self._OSRSBase__request_build(table=table_string)
         response = requests.get(target_url).content
         bs = BeautifulSoup(response, "html.parser")
         rows = bs.find("table").find("tbody").findAll("tr")
@@ -75,7 +143,7 @@ class Rankings(OSRSBase):
         table = OSRSInfo().alt_index_inverse[target]
         rank_page = int(float(((rank-1) / 25) + 1))
         category_string = "1&table={}&page={}".format(table, rank_page)
-        target_url = self._request_build(category_type=category_string)
+        target_url = self._OSRSBase__request_build(category_type=category_string)
         response = requests.get(target_url).content
         bs = BeautifulSoup(response, "html.parser")
         rows = bs.find("table").find("tbody").findAll("tr")
@@ -86,6 +154,6 @@ class Rankings(OSRSBase):
                 if check_rank == str(rank):
                     user = cells[1].getText().replace('\n', '')
                     score = cells[2].getText().replace('\n', '')
-                    return OSRSRank(user, 'nonskill', rank=rank, score=score)
+                    return OSRSRank(user, 'nonskill', rank=rank, score=score, type=target)
             except TypeError:
                 pass

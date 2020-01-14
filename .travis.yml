@@ -18,3 +18,4 @@ deploy:
   on:
     branch: master
   skip_existing: true
+  distributions: sdist bdist_wheel

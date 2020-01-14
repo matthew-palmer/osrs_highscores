@@ -3,12 +3,12 @@ import setuptools
 
 here = str(os.path.abspath(os.path.dirname(__file__)))
 
-with open("README.md", "r") as fh:
-    long_description = fh.read()
+with open("README.md", "r") as f_readme:
+    long_description = f_readme.read()
 
 about = {}
-with open(os.path.join(here, 'osrs_highscores', '__version__.py'), 'r') as f:
-    exec(f.read(), about)
+with open(os.path.join(here, 'osrs_highscores', '__version__.py'), 'r') as f_version:
+    exec(f_version.read(), about)
 
 setuptools.setup(
     name=about['__title__'],
@@ -30,5 +30,6 @@ setuptools.setup(
     install_requires=[
         'requests==2.22.0',
         'beautifulsoup4==4.8.2',
+        'addict==2.2.1',
     ]
 )
