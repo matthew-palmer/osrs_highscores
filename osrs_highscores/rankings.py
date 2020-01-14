@@ -38,7 +38,7 @@ class Rankings(OSRSBase):
         time.sleep(0.1)
 
         table = OSRSInfo().index_inverse[skill]
-        rank_page = int(float(rank/25))
+        rank_page = int(float(((rank - 1) / 25) + 1))
         table_string = "{}&page={}".format(table, rank_page)
         target_url = self._request_build(table=table_string)
         response = requests.get(target_url).content
@@ -73,7 +73,7 @@ class Rankings(OSRSBase):
         time.sleep(0.1)
 
         table = OSRSInfo().alt_index_inverse[target]
-        rank_page = int(float(rank / 25))
+        rank_page = int(float(((rank-1) / 25) + 1))
         category_string = "1&table={}&page={}".format(table, rank_page)
         target_url = self._request_build(category_type=category_string)
         response = requests.get(target_url).content
