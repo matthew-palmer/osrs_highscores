@@ -66,6 +66,7 @@ In the list below, the following are exposed as top level attributes for the ret
     - rank
     - level
     - xp
+    - xp_to_level
 - user.*minigame (e.g. clue_scrolls_easy, lms_rank, bounty_hunter_hunter)
     - rank
     - score
