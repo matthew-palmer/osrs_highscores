@@ -1,4 +1,4 @@
-from resources.categories import default_list
+from .resources.categories import default_list
 
 
 def with_get_attr(cls):

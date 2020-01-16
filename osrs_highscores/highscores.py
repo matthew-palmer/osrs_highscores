@@ -1,8 +1,8 @@
 import requests
 import time
 from addict import Dict
-from resources.categories import ranking_dict
-from resources.utils import OSRSXp
+from .resources.categories import ranking_dict
+from .resources.utils import OSRSXp
 from .base import OSRSBase
 
 

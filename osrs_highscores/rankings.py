@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import time
-from resources.categories import OSRSInfo
+from .resources.categories import OSRSInfo
 from .base import OSRSBase
 
 
