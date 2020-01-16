@@ -12,7 +12,6 @@ with open(os.path.join(here, 'osrs_highscores', '__version__.py'), 'r') as f_ver
 
 setuptools.setup(
     name=about['__title__'],
-    version=about['__version__'],
     description=about['__description__'],
     author=about['__author__'],
     author_email=about['__author_email__'],
@@ -27,6 +26,8 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
+    setup_requires=['setuptools_scm'],
+    use_scm_version=True,
     install_requires=[
         'requests==2.22.0',
         'beautifulsoup4==4.8.2',

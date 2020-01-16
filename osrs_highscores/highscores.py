@@ -1,7 +1,8 @@
 import requests
 import time
 from addict import Dict
-from .categories import ranking_dict
+from .resources.categories import ranking_dict
+from .resources.utils import OSRSXp
 from .base import OSRSBase
 
 
@@ -27,8 +28,6 @@ class Highscores(OSRSBase):
         self.minigame = dict()
         self.boss = dict()
         self.__instantiate()
-        # Exposes all values as top level attributes
-        self.__dict__ = Dict(dict(**self.skill, **self.minigame, **self.boss, **self.__dict__))
 
     def __process_data(self):
         """__process_data
@@ -51,16 +50,19 @@ class Highscores(OSRSBase):
         skill = dict()
         minigame = dict()
         boss = dict()
+        xp_calc = OSRSXp()
 
         count = 0
         for _ in ranking_dict:
             data = self.data[count].split(',')
+            info = dict()
 
             if ranking_dict[count]['type'] == 'skill':
                 info = {
                     'rank': data[0],
                     'level': data[1],
                     'xp': data[2],
+                    'xp_to_level': xp_calc.level_to_xp(int(data[1])+1)-int(data[2])
                 }
                 skill[ranking_dict[count]['name']] = info
             elif ranking_dict[count]['type'] == 'minigame':
@@ -75,6 +77,7 @@ class Highscores(OSRSBase):
                     'kills': data[1],
                 }
                 boss[ranking_dict[count]['name']] = info
+            setattr(self, ranking_dict[count]['name'], Dict(info))
             count += 1
 
         self.skill = skill

@@ -1,4 +1,4 @@
-from .categories import default_list
+from .resources.categories import default_list
 
 
 def with_get_attr(cls):
@@ -9,6 +9,17 @@ def with_get_attr(cls):
 
 @with_get_attr
 class OSRSBase(object):
+    """OSRSBase
+
+    This class is the base class abstraction for highscores lookup. It sets up base functions for creating request URLs.
+
+    Args:
+        target str(optional): Sets the target lookup URI for the class instance.
+                - Accepted Values: [default, ironman, ultamite, hardcore_ironman, seasonal, tournament, deadman]
+
+    Returns:
+        None
+    """
     def __init__(self, target="default"):
         self.base_url = "https://secure.runescape.com"
         self.target = target
