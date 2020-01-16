@@ -1,3 +1,5 @@
 requests==2.22.0
 beautifulsoup4==4.8.2
 addict==2.2.1
+pytest==5.3.2
+setuptools-scm==3.3.3

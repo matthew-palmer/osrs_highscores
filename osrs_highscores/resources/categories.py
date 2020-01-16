@@ -123,6 +123,10 @@ for entry in default_boss_ranks:
 
 
 class OSRSInfo (object):
+    """OSRSInfo
+
+    Class to combine all skills and nonskills to a lookup dict. Inverting the lists is required for table# from the UI
+    """
     def __init__(self):
         self.index = skill_dict
         self.index_inverse = self.inverse_dict(self.index)
@@ -131,7 +135,7 @@ class OSRSInfo (object):
 
     @staticmethod
     def inverse_dict(target_dict):
-        info = dict()
+        rev_info = dict()
         for key, value in target_dict.items():
-            info[value["name"]] = key
-        return info
+            rev_info[value["name"]] = key
+        return rev_info
