@@ -44,7 +44,7 @@ class Highscores(OSRSBase):
             None
 
         """
-        if len(self.data) < 78:
+        if len(self.data) < 80:
             raise ValueError("No data loaded!")
 
         skill = dict()

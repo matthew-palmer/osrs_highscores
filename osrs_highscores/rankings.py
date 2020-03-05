@@ -89,6 +89,23 @@ class Rankings(OSRSBase):
         super(Rankings, self).__init__(target)
         self.index = "overall.ws"
 
+    @staticmethod
+    def __process_data(url):
+        max_retries = 5
+        retry = 0
+        while True:
+            try:
+                response = requests.get(url).content
+                bs = BeautifulSoup(response, "html.parser")
+                rows = bs.find("table").find("tbody").findAll("tr")
+                break
+            except AttributeError:
+                if retry <= max_retries:
+                    raise
+                else:
+                    retry += 1
+        return rows
+
     def get_rank_in_skill(self, skill, rank):
         """get_rank_in_skill
 
@@ -109,9 +126,9 @@ class Rankings(OSRSBase):
         rank_page = int(float(((rank - 1) / 25) + 1))
         table_string = "{}&page={}".format(table, rank_page)
         target_url = self._OSRSBase__request_build(table=table_string)
-        response = requests.get(target_url).content
-        bs = BeautifulSoup(response, "html.parser")
-        rows = bs.find("table").find("tbody").findAll("tr")
+
+        rows = self.__process_data(target_url)
+
         for row in rows:
             cells = row.findAll("td")
             try:
@@ -144,9 +161,9 @@ class Rankings(OSRSBase):
         rank_page = int(float(((rank-1) / 25) + 1))
         category_string = "1&table={}&page={}".format(table, rank_page)
         target_url = self._OSRSBase__request_build(category_type=category_string)
-        response = requests.get(target_url).content
-        bs = BeautifulSoup(response, "html.parser")
-        rows = bs.find("table").find("tbody").findAll("tr")
+
+        rows = self.__process_data(target_url)
+
         for row in rows:
             cells = row.findAll("td")
             try:

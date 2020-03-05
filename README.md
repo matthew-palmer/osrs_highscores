@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/matt-palmer-tfs/osrs_highscores.svg?branch=master)](https://travis-ci.com/matt-palmer-tfs/osrs_highscores)
+[![Build Status](https://travis-ci.com/matthew-palmer/osrs_highscores.svg?branch=master)](https://travis-ci.com/matthew-palmer/osrs_highscores)
 ![types](https://img.shields.io/badge/python-3.6%2B-yellow)
 # osrs_highscores
 
@@ -173,7 +173,7 @@ All Clues Rank: 433023
 |k'ril_tsutsaroth|60|36|
 |mimic|61|37|
 |obor|62|38|
-|nightmare|63|39
+|nightmare|63|39|
 |sarachnis|64|40|
 |scorpia|65|41|
 |skotizo|66|42|
