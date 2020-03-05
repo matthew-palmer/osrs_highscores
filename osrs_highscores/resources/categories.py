@@ -67,6 +67,7 @@ default_boss_ranks = [
     "kree'arra",
     "k'ril_tsutsaroth",
     "mimic",
+    "nightmare",
     "obor",
     "sarachnis",
     "scorpia",
