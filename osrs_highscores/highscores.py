@@ -44,9 +44,6 @@ class Highscores(OSRSBase):
             None
 
         """
-        if len(self.data) < 80:
-            raise ValueError("No data loaded!")
-
         skill = dict()
         minigame = dict()
         boss = dict()
@@ -95,7 +92,17 @@ class Highscores(OSRSBase):
         Returns:
             None
         """
-        self.data = requests.get(self.target_url).content.decode('utf-8').split('\n')
+        max_retries = 5
+        retry = 0
+        while True:
+            self.data = requests.get(self.target_url).content.decode('utf-8').split('\n')
+            if len(self.data) < 80:
+                if retry >= max_retries:
+                    raise ValueError("No data loaded!")
+                else:
+                    retry += 1
+            else:
+                break
         self.time = time.time()
         self.__process_data()
 
