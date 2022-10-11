@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.com/matthew-palmer/osrs_highscores.svg?branch=master)](https://travis-ci.com/matthew-palmer/osrs_highscores)
-![types](https://img.shields.io/badge/python-3.6%2B-yellow)
+![types](https://img.shields.io/badge/python-3.7%2B-yellow)
 # osrs_highscores
 
 ## Project Purpose
@@ -98,6 +98,8 @@ All Clues Rank: 433023
 ```
 
 ###### Reference Table
+**PLEASE NOTE** This Table may not be updated
+
 *Ref # is the associated osrs_highscores dict index number*
 
 *Table # is the associated OSRS highscores URL reference lookup query param*
