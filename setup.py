@@ -12,7 +12,7 @@ with open(os.path.join(here, 'osrs_highscores', '__version__.py'), 'r') as f_ver
 
 setuptools.setup(
     name=about['__title__'],
-    version=adbout['__version__'],
+    version=about['__version__'],
     description=about['__description__'],
     author=about['__author__'],
     author_email=about['__author_email__'],
