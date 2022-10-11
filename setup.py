@@ -12,6 +12,7 @@ with open(os.path.join(here, 'osrs_highscores', '__version__.py'), 'r') as f_ver
 
 setuptools.setup(
     name=about['__title__'],
+    version=adbout['__version__'],
     description=about['__description__'],
     author=about['__author__'],
     author_email=about['__author_email__'],
@@ -25,12 +26,12 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    python_requires='>=3.6',
+    python_requires='>=3.7',
     setup_requires=['setuptools_scm'],
     use_scm_version=True,
     install_requires=[
-        'requests==2.22.0',
-        'beautifulsoup4==4.8.2',
-        'addict==2.2.1',
+        'requests==2.27.1',
+        'beautifulsoup4==4.11.1',
+        'addict==2.4.0'
     ]
 )
