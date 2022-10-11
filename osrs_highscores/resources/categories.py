@@ -37,6 +37,7 @@ default_optional_ranks = [
     "clue_scrolls_elite",
     "clue_scrolls_master",
     "lms_rank",
+    "soul_wars_zeal",
 ]
 
 default_boss_ranks = [
@@ -67,6 +68,7 @@ default_boss_ranks = [
     "kree'arra",
     "k'ril_tsutsaroth",
     "mimic",
+    "nex",
     "nightmare",
     "obor",
     "sarachnis",
@@ -75,9 +77,12 @@ default_boss_ranks = [
     "the_gauntlet",
     "the_corrupted_gauntlet",
     "theatre_of_blood",
+    "theatre_of_blood_hard_mode",
     "thermonuclear_smoke_devil",
-    "tzkal-zuk",
-    "tztok-jad",
+    "tombs_of_amascut",
+    "tombs_of_amascut_expert_mode",
+    "tzkal_zuk",
+    "tztok_jad",
     "venenatis",
     "vet'ion",
     "vorkath",
