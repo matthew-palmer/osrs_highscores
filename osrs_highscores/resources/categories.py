@@ -37,6 +37,7 @@ default_optional_ranks = [
     "clue_scrolls_elite",
     "clue_scrolls_master",
     "lms_rank",
+    "soul_wars_zeal",
 ]
 
 default_boss_ranks = [
