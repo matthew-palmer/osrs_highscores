@@ -55,6 +55,21 @@ Heur
 
 ```
 
+#### Targets
+Table of all available OSRS Highscore boards and the associated ```target``` value used when instantiating a
+```Highscores``` object to query them.
+
+| Target               | Value                  |
+|----------------------|------------------------|
+| OSRS Highscores      | ```default```          |
+| Ironman              | ```ironman```          |
+| Ultimate Ironman     | ```ultimate```         |
+| Hardcore Ironman     | ```hardcore_ironman``` |
+| Seasonal             | ```seasonal```         |
+| Deadman Mode         | ```deadman```          |
+| Tournament           | ```tournament```       |
+| Fresh Start Worlds   | ```fresh_start```      |
+
 
 #### Highscores Attributes
 Table of all available attributes for highscores object
