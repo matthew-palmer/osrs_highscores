@@ -114,7 +114,7 @@ All Clues Rank: 433023
 
 ###### Reference Table
 **PLEASE NOTE** This Table may not be updated. It was last updated on
-16 October 2022.
+11 January 2023.
 
 *Ref # is the associated osrs_highscores dict index number*
 
@@ -196,19 +196,20 @@ All Clues Rank: 433023
 | nightmare                        |65|41|
 | phosanis_nightmare               |66|42|
 | obor                             |67|43|
-| sarachnis                        |68|44|
-| scorpia                          |69|45|
-| skotizo                          |70|46|
-| tempoross                        |71|47|
-| the_gauntlet                     |72|48|
-| the_corrupted_gauntlet           |73|49|
-| theatre_of_blood                 |74|50|
-| thermonuclear_smoke_devil        |75|51|
-| tzkal_zuk                        |76|52|
-| tztok_jad                        |77|53|
-| venenatis                        |78|54|
-| vet_ion                          |79|55|
-| vorkath                          |80|56|
-| wintertodt                       |81|57|
-| zalcano                          |82|58|
-| zulra                            |83|59|
+| phantom_muspah                   |68|44|
+| sarachnis                        |69|45|
+| scorpia                          |70|46|
+| skotizo                          |71|47|
+| tempoross                        |72|48|
+| the_gauntlet                     |73|49|
+| the_corrupted_gauntlet           |74|50|
+| theatre_of_blood                 |75|51|
+| thermonuclear_smoke_devil        |76|52|
+| tzkal_zuk                        |77|53|
+| tztok_jad                        |78|54|
+| venenatis                        |79|55|
+| vet_ion                          |80|56|
+| vorkath                          |81|57|
+| wintertodt                       |82|58|
+| zalcano                          |83|59|
+| zulra                            |84|60|
