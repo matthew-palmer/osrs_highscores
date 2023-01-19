@@ -1,0 +1,1 @@
+startBossList = "Abyssal Sire"

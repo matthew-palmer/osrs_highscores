@@ -3,8 +3,10 @@ from osrs_highscores.highscores import Highscores
 
 
 def test_lookup():
-    user = Highscores('Lynx Titan')
-    assert int(user.strength.level) == 99
+    user = Highscores('RSB PerpDoom')
+    print("Hello")
+    print(user.skill.Attack)
+    assert int(user.skill.Attack.level) == 90
 
 
 def test_update():
