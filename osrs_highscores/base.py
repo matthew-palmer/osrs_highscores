@@ -71,5 +71,9 @@ class OSRSBase(object):
             return self.__format_url("hiscore_oldschool_tournament", **kwargs)
         elif self.target == 'fresh_start':
             return self.__format_url("hiscore_oldschool_fresh_start", **kwargs)
+        elif self.target == 'skiller':
+            return self.__format_url("hiscore_oldschool_skiller", **kwargs)
+        elif self.target == 'skiller_defence':
+            return self.__format_url("hiscore_oldschool_skiller_defence", **kwargs)
         else:
             raise ValueError('Invalid target param for Highscores Instance.')
