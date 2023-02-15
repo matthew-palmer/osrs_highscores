@@ -59,16 +59,18 @@ Heur
 Table of all available OSRS Highscore boards and the associated ```target``` value used when instantiating a
 ```Highscores``` object to query them.
 
-| Target               | Value                  |
-|----------------------|------------------------|
-| OSRS Highscores      | ```default```          |
-| Ironman              | ```ironman```          |
-| Ultimate Ironman     | ```ultimate```         |
-| Hardcore Ironman     | ```hardcore_ironman``` |
-| Seasonal             | ```seasonal```         |
-| Deadman Mode         | ```deadman```          |
-| Tournament           | ```tournament```       |
-| Fresh Start Worlds   | ```fresh_start```      |
+| Target             | Value                  |
+|--------------------|------------------------|
+| OSRS Highscores    | ```default```          |
+| Ironman            | ```ironman```          |
+| Ultimate Ironman   | ```ultimate```         |
+| Hardcore Ironman   | ```hardcore_ironman``` |
+| Seasonal           | ```seasonal```         |
+| Deadman Mode       | ```deadman```          |
+| Tournament         | ```tournament```       |
+| Fresh Start Worlds | ```fresh_start```      |
+| Skiller            | ```skiller```          |
+| 1 Defence          | ```skiller_defence```  |
 
 
 #### Highscores Attributes
@@ -92,7 +94,7 @@ In the list below, the following are exposed as top level attributes for the ret
 ###### Example
 ````
 user = Highscores('Lynx Titan')
-print("Lynx_titan:\n"
+print("Lynx Titan:\n"
       "Attack %s overall: %s\n"
       "Dag Rex Kills: %s\n"
       "All Clues Completed: %s\n"
@@ -105,7 +107,7 @@ print("Lynx_titan:\n"
 ````
 Output
 ```
-Lynx_titan:
+Lynx Titan:
 Attack 99 overall: {'rank': '1', 'level': '2277', 'xp': '4600000000'}
 Dag Rex Kills: -1
 All Clues Completed: 22
@@ -113,8 +115,8 @@ All Clues Rank: 433023
 ```
 
 ###### Reference Table
-**PLEASE NOTE** This Table may not be updated. It was last updated on
-11 January 2023.
+**PLEASE NOTE** This table may not be up-to-date. It was last updated on
+15 February 2023.
 
 *Ref # is the associated osrs_highscores dict index number*
 
@@ -212,4 +214,4 @@ All Clues Rank: 433023
 | vorkath                          |81|57|
 | wintertodt                       |82|58|
 | zalcano                          |83|59|
-| zulra                            |84|60|
+| zulrah                           |84|60|
