@@ -74,6 +74,7 @@ default_boss_ranks = [
     "nightmare",
     "phosanis_nightmare",
     "obor",
+    "phantom_muspah",
     "sarachnis",
     "scorpia",
     "skotizo",
