@@ -174,7 +174,7 @@ All Clues Rank: 433023
 | barrows_chests                   |41|17|
 | bryophyta                        |42|18|
 | callisto                         |43|19|
-| cal_varion                       |44|20|
+| calvar_ion                       |44|20|
 | cerberus                         |45|21|
 | chambers_of_xeric                |46|22|
 | chambers_of_xeric_challenge_mode |47|23|
