@@ -49,7 +49,7 @@ default_boss_ranks = [
     "barrows_chests",
     "bryophyta",
     "callisto",
-    "cal_varion",
+    "calvar_ion",
     "cerberus",
     "chambers_of_xeric",
     "chambers_of_xeric_challenge_mode",
