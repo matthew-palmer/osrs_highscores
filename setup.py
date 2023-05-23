@@ -30,7 +30,7 @@ setuptools.setup(
     setup_requires=['setuptools_scm'],
     use_scm_version=True,
     install_requires=[
-        'requests==2.27.1',
+        'requests==2.31.0',
         'beautifulsoup4==4.11.1',
         'addict==2.4.0'
     ]
