@@ -29,6 +29,8 @@ default_optional_ranks = [
     "league_points",
     "bounty_hunter_hunter",
     "bounty_hunter_rogue",
+    'bounty_hunter_legacy_hunter',
+    'bounty_hunter_legacy_rogue',
     "clue_scrolls_all",
     "clue_scrolls_beginner",
     "clue_scrolls_easy",
