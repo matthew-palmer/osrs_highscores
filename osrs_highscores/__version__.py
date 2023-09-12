@@ -1,7 +1,7 @@
 __title__ = 'osrs_highscores'
 __description__ = 'Simple Wrapper for the OSRS Highscores'
 __url__ = 'https://github.com/matthew-palmer/osrs_highscores'
-__version__ = '0.7.1'
+__version__ = '0.8.0'
 __author__ = 'Matthew Palmer'
 __author_email__ = 'palmer.matthew167@gmail.com'
 __license__ = 'MIT License'
