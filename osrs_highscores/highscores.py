@@ -1,9 +1,15 @@
 import requests
 import time
+import urllib3
 from addict import Dict
-from .resources.categories import ranking_dict
+from .resources.dotnotationcreator import dotnotation
+from .resources.category import categories
 from .resources.utils import OSRSXp
+from .resources.bossslicer import startBossList
+from .resources.listslicer import StartOfBosses
+from .resources.listslicer import EndOfSkill
 from .base import OSRSBase
+from bs4 import BeautifulSoup
 
 
 class Highscores(OSRSBase):
@@ -20,6 +26,7 @@ class Highscores(OSRSBase):
         None
 
     """
+
     def __init__(self, username, target='default'):
         super(Highscores, self).__init__(target)
         self.username = username
@@ -27,6 +34,7 @@ class Highscores(OSRSBase):
         self.skill = dict()
         self.minigame = dict()
         self.boss = dict()
+        self.category = dict()
         self.__instantiate()
 
     def __process_data(self):
@@ -48,38 +56,64 @@ class Highscores(OSRSBase):
         minigame = dict()
         boss = dict()
         xp_calc = OSRSXp()
+        fullList = []
 
+        page = BeautifulSoup(self.categoriesdata.data, 'html.parser')
+        category = page.find("div", {"id": "contentCategory"})
+        anchors = category.find_all("a", href=True)
+        for anchor in anchors:
+            fullList.append(anchor.get_text(strip=True))
+        # for index, anchor in enumerate(anchors):
+        #
+        #
+        #
+        #     if len(self.data[index].split(',')) == 3:
+        #         infomation = self.data[index].split(',')
+        #         info = dotnotation({
+        #             'rank': infomation[0],
+        #             'level': infomation[1],
+        #             'XP': infomation[2]
+        #         })
+        #         self.categories[anchor.get_text(strip=True)] = info
+        #         # print(self.categories[anchor.get_text(strip=True)])
+        #     elif len(self.data[index].split(',')) == 2:
+        #         info = dotnotation({
+        #             'rank': infomation[0],
+        #             'score': infomation[1]
+        #         })
+        #         self.categories[anchor.get_text(strip=True)] = info
+        # self.categories = dotnotation(self.categories)
+        skills = fullList[:fullList.index(EndOfSkill) + 1]
+        minigames = fullList[fullList.index(EndOfSkill) + 1:fullList.index(StartOfBosses)]
+        bosses = fullList[fullList.index(StartOfBosses):]
         count = 0
-        for _ in ranking_dict:
+        for sk in skills:
             data = self.data[count].split(',')
-            info = dict()
-
-            if ranking_dict[count]['type'] == 'skill':
-                info = {
-                    'rank': data[0],
-                    'level': data[1],
-                    'xp': data[2],
-                    'xp_to_level': xp_calc.level_to_xp(int(data[1])+1)-int(data[2])
-                }
-                skill[ranking_dict[count]['name']] = info
-            elif ranking_dict[count]['type'] == 'minigame':
-                info = {
-                    'rank': data[0],
-                    'score': data[1],
-                }
-                minigame[ranking_dict[count]['name']] = info
-            elif ranking_dict[count]['type'] == 'boss':
-                info = {
-                    'rank': data[0],
-                    'kills': data[1],
-                }
-                boss[ranking_dict[count]['name']] = info
-            setattr(self, ranking_dict[count]['name'], Dict(info))
+            categories.Skill[sk] = dotnotation({
+                'rank': data[0],
+                'level': data[1],
+                'xp': data[2],
+                'xp_to_level': xp_calc.level_to_xp(int(data[1]) + 1) - int(data[2])
+            })
             count += 1
-
-        self.skill = skill
-        self.minigame = minigame
-        self.boss = boss
+        for mini in minigames:
+            data = self.data[count].split(',')
+            categories.MiniGame[mini] = dotnotation({
+                'rank': data[0],
+                'score': data[1]
+            })
+            count += 1
+        for boss in bosses:
+            data = self.data[count].split(',')
+            categories.Boss[boss] = dotnotation({
+                'rank': data[0],
+                'kills': data[1]
+            })
+            count += 1
+        self.category = dotnotation(categories)
+        self.skill = dotnotation(categories.Skill)
+        self.minigame = dotnotation(categories.MiniGame)
+        self.boss = dotnotation(categories.Boss)
 
     def __instantiate(self):
         """__instantiate
@@ -94,15 +128,11 @@ class Highscores(OSRSBase):
         """
         max_retries = 5
         retry = 0
-        while True:
-            self.data = requests.get(self.target_url).content.decode('utf-8').split('\n')
-            if len(self.data) < 80:
-                if retry >= max_retries:
-                    raise ValueError("No data loaded!")
-                else:
-                    retry += 1
-            else:
-                break
+
+        self.data = requests.get(self.target_url).content.decode('utf-8').split('\n')
+        urlpage = "https://secure.runescape.com/m=hiscore_oldschool/overall"
+        http = urllib3.PoolManager()
+        self.categoriesdata = http.request("GET", urlpage)
         self.time = time.time()
         self.__process_data()
 

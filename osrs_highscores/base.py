@@ -41,7 +41,6 @@ class OSRSBase(object):
         url = "{}/m={}/{}".format(self.base_url, target_path, self.index)
         for key, value in kwargs.items():
             url += "?{}={}".format(key, value)
-
         return url
 
     def __request_build(self, **kwargs):
