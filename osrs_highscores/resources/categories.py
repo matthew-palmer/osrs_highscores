@@ -27,6 +27,7 @@ default_skills = [
 
 default_optional_ranks = [
     "league_points",
+    "deadman_points",
     "bounty_hunter_hunter",
     "bounty_hunter_rogue",
     'bounty_hunter_legacy_hunter',
@@ -42,11 +43,14 @@ default_optional_ranks = [
     "pvp_arena_rank",
     "soul_wars_zeal",
     "rifts_closed",
+    "colosseum_glory",
 ]
 
 default_boss_ranks = [
     "abyssal_sire",
     "alchemical_hydra",
+    "amoxliatl",
+    "araxxor",
     "artio",
     "barrows_chests",
     "bryophyta",
@@ -69,11 +73,13 @@ default_boss_ranks = [
     "giant_mole",
     "grotesque_guardians",
     "hespori",
+    "hueycoatl",
     "kalphite_queen",
     "king_black_dragon",
     "kraken",
     "kree_arra",
     "kril_tsutsaroth",
+    "lunar_chests",
     "mimic",
     "nex",
     "nightmare",
@@ -82,7 +88,9 @@ default_boss_ranks = [
     "phantom_muspah",
     "sarachnis",
     "scorpia",
+    "scurrius",
     "skotizo",
+    "sol_heredit",
     "spindel",
     "tempoross",
     "the_gauntlet",
