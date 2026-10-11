@@ -1,8 +1,8 @@
 from bs4 import BeautifulSoup
 import requests
 import time
-from .resources.categories import OSRSInfo
-from .base import OSRSBase
+from .resources.categories import OSRSInfo, normalize_name
+from .base import OSRSBase, max_retries, targets
 
 
 class OSRSRank(object):
@@ -80,31 +80,54 @@ class Rankings(OSRSBase):
 
     Args:
         target str: The target Highscores to lookup username. Defaults to `default`
-                  - Accepted Values: [default, ironman, ultamite, hardcore_ironman, seasonal, tournament, deadman]
+                  - Accepted Values: [default, ironman, ultimate, hardcore_ironman, seasonal, deadman, tournament,
+                                      fresh_start, skiller, skiller_defence]
 
     Returns:
         None
     """
+    # Any player present on the main hiscores; used to read the live table numbers for each skill/activity.
+    reference_player = "Lynx Titan"
+
     def __init__(self, target="default"):
         super(Rankings, self).__init__(target)
         self.index = "overall.ws"
+        self.__tables = None
 
-    @staticmethod
-    def __process_data(url):
-        max_retries = 5
+    def __load_tables(self):
+        """__load_tables
+
+        Reads the current table number for every skill and activity from the hiscores JSON endpoint, falling back to
+        the bundled category list if it can't be reached. Table numbers are the same across all game modes.
+
+        Returns:
+            (dict, dict): skill name -> table number, activity name -> table number
+        """
+        if self.__tables is None:
+            info = OSRSInfo()
+            skills, activities = dict(info.index_inverse), dict(info.alt_index_inverse)
+            try:
+                url = "{}/m={}/index_lite.json".format(self.base_url, targets["default"])
+                data = self._get(url, params={"player": self.reference_player}).json()
+                skills.update({normalize_name(entry["name"]): entry["id"] for entry in data["skills"]})
+                activities.update({normalize_name(entry["name"]): entry["id"] for entry in data["activities"]})
+            except (ValueError, KeyError, requests.RequestException):
+                pass
+            self.__tables = (skills, activities)
+        return self.__tables
+
+    def __process_data(self, params):
+        target_url = self._OSRSBase__request_build()
         retry = 0
         while True:
+            bs = BeautifulSoup(self._get(target_url, params=params).content, "html.parser")
             try:
-                response = requests.get(url).content
-                bs = BeautifulSoup(response, "html.parser")
-                rows = bs.find("table").find("tbody").findAll("tr")
-                break
+                return bs.find("table").find("tbody").find_all("tr")
             except AttributeError:
-                if retry <= max_retries:
+                if retry >= max_retries:
                     raise
-                else:
-                    retry += 1
-        return rows
+                retry += 1
+                time.sleep(0.5 * retry)
 
     def get_rank_in_skill(self, skill, rank):
         """get_rank_in_skill
@@ -112,7 +135,7 @@ class Rankings(OSRSBase):
         Acquires an OSRSRank Object based on the target lookup and rank number.
 
         Args:
-            target str: Target skill, (e.g. attack, strength etc.)
+            skill str: Target skill, (e.g. attack, strength etc.)
             rank int: Rank target to lookup
 
         Returns:
@@ -122,15 +145,12 @@ class Rankings(OSRSBase):
         # Only added to avoid any implementations that may hurt the OSRS servers with load
         time.sleep(0.1)
 
-        table = OSRSInfo().index_inverse[skill]
-        rank_page = int(float(((rank - 1) / 25) + 1))
-        table_string = "{}&page={}".format(table, rank_page)
-        target_url = self._OSRSBase__request_build(table=table_string)
-
-        rows = self.__process_data(target_url)
+        table = self.__load_tables()[0][skill]
+        rank_page = (rank - 1) // 25 + 1
+        rows = self.__process_data({"table": table, "page": rank_page})
 
         for row in rows:
-            cells = row.findAll("td")
+            cells = row.find_all("td")
             try:
                 check_rank = cells[0].getText().replace('\n', '').replace(',', '')
                 if check_rank == str(rank):
@@ -138,7 +158,7 @@ class Rankings(OSRSBase):
                     level = cells[2].getText().replace('\n', '')
                     xp = cells[3].getText().replace('\n', '')
                     return OSRSRank(user, 'skill', rank=rank, level=level, xp=xp, skill=skill)
-            except TypeError:
+            except (TypeError, IndexError):
                 pass
 
     def get_rank_in_target(self, target, rank):
@@ -147,7 +167,7 @@ class Rankings(OSRSBase):
         Acquires an OSRSRank Object based on the target lookup and rank number.
 
         Args:
-            target str: Target alternative nonskill, (e.g. abyssal_sire, clue_scroll_all etc.)
+            target str: Target alternative nonskill, (e.g. abyssal_sire, clue_scrolls_all etc.)
             rank int: Rank target to lookup
 
         Returns:
@@ -157,20 +177,17 @@ class Rankings(OSRSBase):
         # Only added to avoid any implementations that may hurt the OSRS servers with load
         time.sleep(0.1)
 
-        table = OSRSInfo().alt_index_inverse[target]
-        rank_page = int(float(((rank-1) / 25) + 1))
-        category_string = "1&table={}&page={}".format(table, rank_page)
-        target_url = self._OSRSBase__request_build(category_type=category_string)
-
-        rows = self.__process_data(target_url)
+        table = self.__load_tables()[1][target]
+        rank_page = (rank - 1) // 25 + 1
+        rows = self.__process_data({"category_type": 1, "table": table, "page": rank_page})
 
         for row in rows:
-            cells = row.findAll("td")
+            cells = row.find_all("td")
             try:
                 check_rank = cells[0].getText().replace('\n', '').replace(',', '')
                 if check_rank == str(rank):
                     user = cells[1].getText().replace('\n', '')
                     score = cells[2].getText().replace('\n', '')
                     return OSRSRank(user, 'nonskill', rank=rank, score=score, type=target)
-            except TypeError:
+            except (TypeError, IndexError):
                 pass

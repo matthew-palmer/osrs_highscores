@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "osrs_highscores"
+dynamic = ["version"]
+description = "Simple Wrapper for the OSRS Highscores"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Matthew Palmer", email = "palmer.matthew167@gmail.com" }]
+requires-python = ">=3.9"
+dependencies = [
+    "requests>=2.32",
+    "beautifulsoup4>=4.12",
+    "addict>=2.4",
+]
+keywords = ["osrs", "runescape", "old school runescape", "highscores", "hiscores"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Developers",
+    "Topic :: Games/Entertainment",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8"]
+
+[project.urls]
+Homepage = "https://github.com/matthew-palmer/osrs_highscores"
+Issues = "https://github.com/matthew-palmer/osrs_highscores/issues"
+
+[tool.setuptools.dynamic]
+version = { attr = "osrs_highscores.__version__.__version__" }
+
+[tool.setuptools.packages.find]
+include = ["osrs_highscores*"]
+
+[tool.pytest.ini_options]
+addopts = "-m 'not live'"
+markers = ["live: tests that hit the real OSRS hiscores (run with: pytest -m live)"]

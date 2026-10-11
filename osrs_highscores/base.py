@@ -1,4 +1,25 @@
+import time
+import requests
+from .__version__ import __version__, __url__
 from .resources.categories import default_list
+
+# Maps the `target` value accepted by this library to the OSRS hiscores path for that game mode.
+targets = {
+    "default": "hiscore_oldschool",
+    "ironman": "hiscore_oldschool_ironman",
+    "ultimate": "hiscore_oldschool_ultimate",
+    "hardcore_ironman": "hiscore_oldschool_hardcore_ironman",
+    "seasonal": "hiscore_oldschool_seasonal",
+    "deadman": "hiscore_oldschool_deadman",
+    "tournament": "hiscore_oldschool_tournament",
+    "fresh_start": "hiscore_oldschool_fresh_start",
+    "skiller": "hiscore_oldschool_skiller",
+    "skiller_defence": "hiscore_oldschool_skiller_defence",
+}
+
+headers = {"User-Agent": "osrs_highscores/{} (+{})".format(__version__, __url__)}
+timeout = 10
+max_retries = 5
 
 
 def with_get_attr(cls):
@@ -15,15 +36,18 @@ class OSRSBase(object):
 
     Args:
         target str(optional): Sets the target lookup URI for the class instance.
-                - Accepted Values: [default, ironman, ultamite, hardcore_ironman, seasonal, tournament, deadman]
+                - Accepted Values: [default, ironman, ultimate, hardcore_ironman, seasonal, deadman, tournament,
+                                    fresh_start, skiller, skiller_defence]
 
     Returns:
         None
     """
     def __init__(self, target="default"):
+        if target not in targets:
+            raise ValueError('Invalid target param for Highscores Instance.')
         self.base_url = "https://secure.runescape.com"
         self.target = target
-        self.index = "index_lite.ws"
+        self.index = "index_lite.json"
 
     def __format_url(self, target_path, **kwargs):
         """__format_url
@@ -53,27 +77,39 @@ class OSRSBase(object):
             self
 
         Returns:
-            self._format_url Pointer with provided Value from if/else self.target param.
+            self._format_url Pointer with provided Value from self.target param.
         """
-        if self.target == 'default':
-            return self.__format_url("hiscore_oldschool", **kwargs)
-        elif self.target == 'ironman':
-            return self.__format_url("hiscore_oldschool_ironman", **kwargs)
-        elif self.target == 'ultimate':
-            return self.__format_url("hiscore_oldschool_ultimate", **kwargs)
-        elif self.target == 'hardcore_ironman':
-            return self.__format_url("hiscore_oldschool_hardcore_ironman", **kwargs)
-        elif self.target == 'seasonal':
-            return self.__format_url("hiscore_oldschool_seasonal", **kwargs)
-        elif self.target == 'deadman':
-            return self.__format_url("hiscore_oldschool_deadman", **kwargs)
-        elif self.target == 'tournament':
-            return self.__format_url("hiscore_oldschool_tournament", **kwargs)
-        elif self.target == 'fresh_start':
-            return self.__format_url("hiscore_oldschool_fresh_start", **kwargs)
-        elif self.target == 'skiller':
-            return self.__format_url("hiscore_oldschool_skiller", **kwargs)
-        elif self.target == 'skiller_defence':
-            return self.__format_url("hiscore_oldschool_skiller_defence", **kwargs)
-        else:
+        if self.target not in targets:
             raise ValueError('Invalid target param for Highscores Instance.')
+        return self.__format_url(targets[self.target], **kwargs)
+
+    @staticmethod
+    def _get(url, params=None):
+        """_get
+
+        *Internal Method* Performs a GET request against the OSRS hiscores, retrying transient failures.
+
+        Args:
+            url str: Fully Qualified URL to request
+            params dict(optional): Query params for the request
+
+        Returns:
+            requests.Response
+
+        Raises:
+            ValueError: The hiscores returned 404 (e.g. the player does not exist on the target hiscores)
+            requests.RequestException: The request kept failing after all retries
+        """
+        retry = 0
+        while True:
+            try:
+                response = requests.get(url, params=params, headers=headers, timeout=timeout)
+                if response.status_code == 404:
+                    raise ValueError("No data loaded! Player not found on the target hiscores.")
+                response.raise_for_status()
+                return response
+            except requests.RequestException:
+                if retry >= max_retries:
+                    raise
+                retry += 1
+                time.sleep(0.5 * retry)
