@@ -1,3 +1,5 @@
+import re
+
 default_skills = [
     "overall",
     "attack",
@@ -23,6 +25,7 @@ default_skills = [
     "runecraft",
     "hunter",
     "construction",
+    "sailing",
 ]
 
 default_optional_ranks = [
@@ -44,6 +47,7 @@ default_optional_ranks = [
     "soul_wars_zeal",
     "rifts_closed",
     "colosseum_glory",
+    "collections_logged",
 ]
 
 default_boss_ranks = [
@@ -53,6 +57,7 @@ default_boss_ranks = [
     "araxxor",
     "artio",
     "barrows_chests",
+    "brutus",
     "bryophyta",
     "callisto",
     "calvar_ion",
@@ -68,6 +73,7 @@ default_boss_ranks = [
     "dagannoth_rex",
     "dagannoth_supreme",
     "deranged_archaeologist",
+    "doom_of_mokhaiotl",
     "duke_sucellus",
     "general_graardor",
     "giant_mole",
@@ -88,6 +94,7 @@ default_boss_ranks = [
     "sarachnis",
     "scorpia",
     "scurrius",
+    "shellbane_gryphon",
     "skotizo",
     "sol_heredit",
     "spindel",
@@ -96,6 +103,7 @@ default_boss_ranks = [
     "the_corrupted_gauntlet",
     "the_hueycoatl",
     "the_leviathan",
+    "the_royal_titans",
     "the_whisperer",
     "theatre_of_blood",
     "theatre_of_blood_hard_mode",
@@ -109,9 +117,34 @@ default_boss_ranks = [
     "vet_ion",
     "vorkath",
     "wintertodt",
+    "yama",
     "zalcano",
     "zulrah",
 ]
+
+# Jagex display names that don't map cleanly onto the snake_case attribute names above.
+name_aliases = {
+    "calvarion": "calvar_ion",
+    "kreearra": "kree_arra",
+    "vetion": "vet_ion",
+}
+
+
+def normalize_name(name):
+    """normalize_name
+
+    Converts a Jagex hiscores display name (e.g. "Clue Scrolls (all)", "K'ril Tsutsaroth") to the
+    snake_case attribute name used by this library (e.g. "clue_scrolls_all", "kril_tsutsaroth").
+
+    Args:
+        name str: Display name as returned by the OSRS hiscores
+
+    Returns:
+        str: snake_case attribute name
+    """
+    key = re.sub(r"[^a-z0-9]+", "_", name.lower().replace("'", "")).strip("_")
+    return name_aliases.get(key, key)
+
 
 default_list = default_skills + default_optional_ranks + default_boss_ranks
 

@@ -1,7 +1,6 @@
-import requests
 import time
 from addict import Dict
-from .resources.categories import ranking_dict
+from .resources.categories import default_optional_ranks, normalize_name
 from .resources.utils import OSRSXp
 from .base import OSRSBase
 
@@ -14,7 +13,8 @@ class Highscores(OSRSBase):
     Args:
         username str: Target Username for Account
         target   str: The target Highscores to lookup username. Defaults to `default`
-                  - Accepted Values: [default, ironman, ultamite, hardcore_ironman, seasonal, tournament, deadman]
+                  - Accepted Values: [default, ironman, ultimate, hardcore_ironman, seasonal, deadman, tournament,
+                                      fresh_start, skiller, skiller_defence]
 
     Returns:
         None
@@ -23,7 +23,7 @@ class Highscores(OSRSBase):
     def __init__(self, username, target='default'):
         super(Highscores, self).__init__(target)
         self.username = username
-        self.target_url = self._OSRSBase__request_build(player=username)
+        self.target_url = self._OSRSBase__request_build()
         self.skill = dict()
         self.minigame = dict()
         self.boss = dict()
@@ -32,10 +32,13 @@ class Highscores(OSRSBase):
     def __process_data(self):
         """__process_data
 
-        Formats the returned raw string value into consumable self.* attributes
+        Formats the returned JSON payload into consumable self.* attributes
         self.skill
         self.minigame
         self.boss
+
+        Entries are matched by name rather than position, so new skills, minigames and bosses added to the
+        OSRS hiscores are picked up automatically.
 
         Args:
             self
@@ -49,33 +52,38 @@ class Highscores(OSRSBase):
         boss = dict()
         xp_calc = OSRSXp()
 
-        count = 0
-        for _ in ranking_dict:
-            data = self.data[count].split(',')
-            info = dict()
+        for entry in self.data.get('skills', []):
+            name = normalize_name(entry['name'])
+            level = int(entry['level'])
+            xp = int(entry['xp'])
+            if name == 'overall' or level >= 99:
+                xp_to_level = 0
+            else:
+                xp_to_level = xp_calc.level_to_xp(level + 1) - xp
+            info = {
+                'rank': str(entry['rank']),
+                'level': str(level),
+                'xp': str(xp),
+                'xp_to_level': xp_to_level
+            }
+            skill[name] = info
+            setattr(self, name, Dict(info))
 
-            if ranking_dict[count]['type'] == 'skill':
+        for entry in self.data.get('activities', []):
+            name = normalize_name(entry['name'])
+            if name in default_optional_ranks:
                 info = {
-                    'rank': data[0],
-                    'level': data[1],
-                    'xp': data[2],
-                    'xp_to_level': xp_calc.level_to_xp(int(data[1])+1)-int(data[2])
+                    'rank': str(entry['rank']),
+                    'score': str(entry['score']),
                 }
-                skill[ranking_dict[count]['name']] = info
-            elif ranking_dict[count]['type'] == 'minigame':
+                minigame[name] = info
+            else:
                 info = {
-                    'rank': data[0],
-                    'score': data[1],
+                    'rank': str(entry['rank']),
+                    'kills': str(entry['score']),
                 }
-                minigame[ranking_dict[count]['name']] = info
-            elif ranking_dict[count]['type'] == 'boss':
-                info = {
-                    'rank': data[0],
-                    'kills': data[1],
-                }
-                boss[ranking_dict[count]['name']] = info
-            setattr(self, ranking_dict[count]['name'], Dict(info))
-            count += 1
+                boss[name] = info
+            setattr(self, name, Dict(info))
 
         self.skill = skill
         self.minigame = minigame
@@ -91,18 +99,17 @@ class Highscores(OSRSBase):
 
         Returns:
             None
+
+        Raises:
+            ValueError: The player was not found on the target hiscores, or no data was returned
         """
-        max_retries = 5
-        retry = 0
-        while True:
-            self.data = requests.get(self.target_url).content.decode('utf-8').split('\n')
-            if len(self.data) < 80:
-                if retry >= max_retries:
-                    raise ValueError("No data loaded!")
-                else:
-                    retry += 1
-            else:
-                break
+        try:
+            self.data = self._get(self.target_url, params={'player': self.username}).json()
+        except ValueError as err:
+            # Includes a 404 from the hiscores and an unparsable (non-JSON) body
+            raise ValueError("No data loaded! {}".format(err)) from err
+        if not self.data.get('skills'):
+            raise ValueError("No data loaded!")
         self.time = time.time()
         self.__process_data()
 
