@@ -98,7 +98,7 @@ class OSRSBase(object):
 
         Raises:
             ValueError: The hiscores returned 404 (e.g. the player does not exist on the target hiscores)
-            requests.RequestException: The request kept failing after all retries
+            requests.RequestException: A client error (e.g. 403), or the request kept failing after all retries
         """
         retry = 0
         while True:
@@ -108,8 +108,10 @@ class OSRSBase(object):
                     raise ValueError("No data loaded! Player not found on the target hiscores.")
                 response.raise_for_status()
                 return response
-            except requests.RequestException:
-                if retry >= max_retries:
+            except requests.RequestException as err:
+                status = response.status_code if isinstance(err, requests.HTTPError) else None
+                # Client errors (e.g. 403 from Jagex's bot protection) won't succeed on retry; 429 might
+                if retry >= max_retries or (status is not None and status < 500 and status != 429):
                     raise
                 retry += 1
                 time.sleep(0.5 * retry)

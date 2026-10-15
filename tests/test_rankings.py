@@ -1,6 +1,7 @@
 from unittest import mock
 
 import pytest
+import requests
 
 from osrs_highscores.rankings import Rankings
 from .conftest import make_response
@@ -45,5 +46,10 @@ def test_table_ids_fall_back_when_offline(no_sleep):
 
 @pytest.mark.live
 def test_live_lookup_skill():
-    rank = Rankings().get_rank_in_skill('attack', 1)
+    try:
+        rank = Rankings().get_rank_in_skill('attack', 1)
+    except requests.HTTPError as err:
+        if err.response is not None and err.response.status_code == 403:
+            pytest.xfail("OSRS hiscores bot protection blocked the ranking page scrape (403)")
+        raise
     assert rank.rank == 1

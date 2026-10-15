@@ -81,6 +81,20 @@ def test_retries_transient_errors(lynx_titan, no_sleep):
     assert get.call_count == 3
 
 
+def test_client_errors_are_not_retried(no_sleep):
+    with mock.patch("osrs_highscores.base.requests.get", return_value=make_response(403)) as get:
+        with pytest.raises(requests.HTTPError):
+            Highscores('Lynx Titan')
+    assert get.call_count == 1
+
+
+def test_rate_limit_is_retried(lynx_titan, no_sleep):
+    responses = [make_response(429), make_response(payload=lynx_titan)]
+    with mock.patch("osrs_highscores.base.requests.get", side_effect=responses) as get:
+        Highscores('Lynx Titan')
+    assert get.call_count == 2
+
+
 def test_gives_up_after_retries(no_sleep):
     with mock.patch("osrs_highscores.base.requests.get", side_effect=requests.ConnectionError()) as get:
         with pytest.raises(requests.ConnectionError):
