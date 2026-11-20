@@ -33,7 +33,7 @@ def test_lookup_nonskill_uses_live_table_ids(lynx_titan, no_sleep):
         rank = Rankings(target='ironman').get_rank_in_target('the_royal_titans', 26)
     assert rank.score == '12345'
     assert get.call_args.args[0] == "https://secure.runescape.com/m=hiscore_oldschool_ironman/overall.ws"
-    assert get.call_args.kwargs["params"] == {"category_type": 1, "table": 71, "page": 2}
+    assert get.call_args.kwargs["params"] == {"category_type": 1, "table": 74, "page": 2}
 
 
 def test_table_ids_fall_back_when_offline(no_sleep):

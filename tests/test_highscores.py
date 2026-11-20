@@ -25,27 +25,37 @@ def test_lookup(mock_get):
 def test_categories(mock_get):
     user = Highscores('Lynx Titan')
     assert user.clue_scrolls_all.score == '22'
-    assert user.clue_scrolls_all.rank == '433023'
+    assert user.clue_scrolls_all.rank == '1157071'
     assert user.dagannoth_rex.kills == '-1'
     assert user.kril_tsutsaroth == user.boss['kril_tsutsaroth']
     assert 'clue_scrolls_all' in user.minigame
+    assert 'grid_points' in user.minigame
+    assert 'the_fractured_archive' in user.boss
     assert 'zulrah' in user.boss
     assert 'sailing' in user.skill
 
 
-def test_xp_to_level(mock_get):
+def test_xp_to_level(mock_get, lynx_titan):
+    hunter = next(entry for entry in lynx_titan["skills"] if entry["name"] == "Hunter")
+    hunter.update(level=80, xp=2000000)
     user = Highscores('Lynx Titan')
     assert user.hunter.xp_to_level == 2192818 - 2000000  # level 81 is 2,192,818 xp
+    assert user.sailing.xp_to_level == 83
     assert user.attack.xp_to_level == 0
     assert user.overall.xp_to_level == 0
 
 
 def test_new_entries_are_picked_up(mock_get, lynx_titan):
-    lynx_titan["activities"].insert(3, {"id": 3, "name": "Brand New Boss", "rank": 7, "score": 42})
+    activities = lynx_titan["activities"]
+    activities.insert(1, {"id": 1, "name": "Brand New Minigame", "rank": 3, "score": 7})
+    boss_index = next(i for i, entry in enumerate(activities) if entry["name"] == "Abyssal Sire") + 1
+    activities.insert(boss_index, {"id": boss_index, "name": "Brand New Boss", "rank": 7, "score": 42})
     user = Highscores('Lynx Titan')
+    assert user.minigame['brand_new_minigame'] == {'rank': '3', 'score': '7'}
     assert user.brand_new_boss.kills == '42'
-    # Entries after the insertion are still matched by name, not position
+    # Entries after the insertions are still matched by name, not position
     assert user.clue_scrolls_all.score == '22'
+    assert user.zulrah.kills == '-1'
 
 
 def test_update(mock_get):

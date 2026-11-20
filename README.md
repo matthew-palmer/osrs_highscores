@@ -40,7 +40,7 @@ python -m pip install osrs_highscores --upgrade
 
 # A player that doesn't exist on the target hiscores raises ValueError
 >>> Highscores('Lynx Titan', target='ironman')
-ValueError: No data loaded! ...
+ValueError: No data loaded! Player not found on the target hiscores.
 ```
 
 Values are returned as strings, exactly as reported by the hiscores. Unranked entries are reported as `'-1'`.
@@ -48,6 +48,9 @@ Values are returned as strings, exactly as reported by the hiscores. Unranked en
 #### Rankings
 *The OSRS API does not have a specific endpoint, so queries using ranks is done with bs4 and scraping the UI result.*
 *Implementation of this Function may not work on all systems if you have issues with bs4.*
+
+> **Note:** as of November 2026 the OSRS hiscores bot protection blocks automated requests for the ranking pages, so
+> `Rankings` lookups typically fail with `requests.HTTPError` (403 Forbidden). `Highscores` lookups are not affected.
 ```
 >>> from osrs_highscores import Rankings
 
@@ -100,7 +103,8 @@ In the list below, the following are exposed as top level attributes for the ret
 All of the above are also grouped as dicts in `user.skill`, `user.minigame` and `user.boss`.
 
 Entries are matched by name from the hiscores JSON API, so skills, minigames and bosses that Jagex adds are picked up
-automatically, even before they are listed below. A display name is converted to an attribute by lowercasing it and
+automatically, even before they are listed below. An activity this library doesn't know yet is grouped as a minigame
+if the hiscores list it before the bosses, and as a boss otherwise. A display name is converted to an attribute by lowercasing it and
 replacing punctuation/spaces with `_` (e.g. `Theatre of Blood: Hard Mode` -> `theatre_of_blood_hard_mode`).
 
 ###### Example
@@ -127,7 +131,7 @@ All Clues Rank: 433023
 ```
 
 ###### Reference Table
-**PLEASE NOTE** This table may not be up-to-date. It was last updated on 11 October 2026. New hiscores entries are
+**PLEASE NOTE** This table may not be up-to-date. It was last updated on 20 November 2026. New hiscores entries are
 still available on `Highscores` objects; `Rankings` reads the current table numbers from the hiscores at runtime.
 
 *Ref # is the associated osrs_highscores index number*
@@ -164,94 +168,98 @@ still available on `Highscores` objects; `Rankings` reads the current table numb
 | hunter                            | 22    | 22                             |
 | construction                      | 23    | 23                             |
 | sailing                           | 24    | 24                             |
-| league_points                     | 25    | 0                              |
-| deadman_points                    | 26    | 1                              |
-| bounty_hunter_hunter              | 27    | 2                              |
-| bounty_hunter_rogue               | 28    | 3                              |
-| bounty_hunter_legacy_hunter       | 29    | 4                              |
-| bounty_hunter_legacy_rogue        | 30    | 5                              |
-| clue_scrolls_all                  | 31    | 6                              |
-| clue_scrolls_beginner             | 32    | 7                              |
-| clue_scrolls_easy                 | 33    | 8                              |
-| clue_scrolls_medium               | 34    | 9                              |
-| clue_scrolls_hard                 | 35    | 10                             |
-| clue_scrolls_elite                | 36    | 11                             |
-| clue_scrolls_master               | 37    | 12                             |
-| lms_rank                          | 38    | 13                             |
-| pvp_arena_rank                    | 39    | 14                             |
-| soul_wars_zeal                    | 40    | 15                             |
-| rifts_closed                      | 41    | 16                             |
-| colosseum_glory                   | 42    | 17                             |
-| collections_logged                | 43    | 18                             |
-| abyssal_sire                      | 44    | 19                             |
-| alchemical_hydra                  | 45    | 20                             |
-| amoxliatl                         | 46    | 21                             |
-| araxxor                           | 47    | 22                             |
-| artio                             | 48    | 23                             |
-| barrows_chests                    | 49    | 24                             |
-| brutus                            | 50    | 25                             |
-| bryophyta                         | 51    | 26                             |
-| callisto                          | 52    | 27                             |
-| calvar_ion                        | 53    | 28                             |
-| cerberus                          | 54    | 29                             |
-| chambers_of_xeric                 | 55    | 30                             |
-| chambers_of_xeric_challenge_mode  | 56    | 31                             |
-| chaos_elemental                   | 57    | 32                             |
-| chaos_fanatic                     | 58    | 33                             |
-| commander_zilyana                 | 59    | 34                             |
-| corporeal_beast                   | 60    | 35                             |
-| crazy_archaeologist               | 61    | 36                             |
-| dagannoth_prime                   | 62    | 37                             |
-| dagannoth_rex                     | 63    | 38                             |
-| dagannoth_supreme                 | 64    | 39                             |
-| deranged_archaeologist            | 65    | 40                             |
-| doom_of_mokhaiotl                 | 66    | 41                             |
-| duke_sucellus                     | 67    | 42                             |
-| general_graardor                  | 68    | 43                             |
-| giant_mole                        | 69    | 44                             |
-| grotesque_guardians               | 70    | 45                             |
-| hespori                           | 71    | 46                             |
-| kalphite_queen                    | 72    | 47                             |
-| king_black_dragon                 | 73    | 48                             |
-| kraken                            | 74    | 49                             |
-| kree_arra                         | 75    | 50                             |
-| kril_tsutsaroth                   | 76    | 51                             |
-| lunar_chests                      | 77    | 52                             |
-| mimic                             | 78    | 53                             |
-| nex                               | 79    | 54                             |
-| nightmare                         | 80    | 55                             |
-| phosanis_nightmare                | 81    | 56                             |
-| obor                              | 82    | 57                             |
-| phantom_muspah                    | 83    | 58                             |
-| sarachnis                         | 84    | 59                             |
-| scorpia                           | 85    | 60                             |
-| scurrius                          | 86    | 61                             |
-| shellbane_gryphon                 | 87    | 62                             |
-| skotizo                           | 88    | 63                             |
-| sol_heredit                       | 89    | 64                             |
-| spindel                           | 90    | 65                             |
-| tempoross                         | 91    | 66                             |
-| the_gauntlet                      | 92    | 67                             |
-| the_corrupted_gauntlet            | 93    | 68                             |
-| the_hueycoatl                     | 94    | 69                             |
-| the_leviathan                     | 95    | 70                             |
-| the_royal_titans                  | 96    | 71                             |
-| the_whisperer                     | 97    | 72                             |
-| theatre_of_blood                  | 98    | 73                             |
-| theatre_of_blood_hard_mode        | 99    | 74                             |
-| thermonuclear_smoke_devil         | 100   | 75                             |
-| tombs_of_amascut                  | 101   | 76                             |
-| tombs_of_amascut_expert_mode      | 102   | 77                             |
-| tzkal_zuk                         | 103   | 78                             |
-| tztok_jad                         | 104   | 79                             |
-| vardorvis                         | 105   | 80                             |
-| venenatis                         | 106   | 81                             |
-| vet_ion                           | 107   | 82                             |
-| vorkath                           | 108   | 83                             |
-| wintertodt                        | 109   | 84                             |
-| yama                              | 110   | 85                             |
-| zalcano                           | 111   | 86                             |
-| zulrah                            | 112   | 87                             |
+| grid_points                       | 25    | 0                              |
+| league_points                     | 26    | 1                              |
+| deadman_points                    | 27    | 2                              |
+| bounty_hunter_hunter              | 28    | 3                              |
+| bounty_hunter_rogue               | 29    | 4                              |
+| bounty_hunter_legacy_hunter       | 30    | 5                              |
+| bounty_hunter_legacy_rogue        | 31    | 6                              |
+| clue_scrolls_all                  | 32    | 7                              |
+| clue_scrolls_beginner             | 33    | 8                              |
+| clue_scrolls_easy                 | 34    | 9                              |
+| clue_scrolls_medium               | 35    | 10                             |
+| clue_scrolls_hard                 | 36    | 11                             |
+| clue_scrolls_elite                | 37    | 12                             |
+| clue_scrolls_master               | 38    | 13                             |
+| lms_rank                          | 39    | 14                             |
+| pvp_arena_rank                    | 40    | 15                             |
+| soul_wars_zeal                    | 41    | 16                             |
+| rifts_closed                      | 42    | 17                             |
+| colosseum_glory                   | 43    | 18                             |
+| collections_logged                | 44    | 19                             |
+| abyssal_sire                      | 45    | 20                             |
+| alchemical_hydra                  | 46    | 21                             |
+| amoxliatl                         | 47    | 22                             |
+| araxxor                           | 48    | 23                             |
+| artio                             | 49    | 24                             |
+| barrows_chests                    | 50    | 25                             |
+| brutus                            | 51    | 26                             |
+| bryophyta                         | 52    | 27                             |
+| callisto                          | 53    | 28                             |
+| calvar_ion                        | 54    | 29                             |
+| cerberus                          | 55    | 30                             |
+| chambers_of_xeric                 | 56    | 31                             |
+| chambers_of_xeric_challenge_mode  | 57    | 32                             |
+| chaos_elemental                   | 58    | 33                             |
+| chaos_fanatic                     | 59    | 34                             |
+| commander_zilyana                 | 60    | 35                             |
+| corporeal_beast                   | 61    | 36                             |
+| crazy_archaeologist               | 62    | 37                             |
+| dagannoth_prime                   | 63    | 38                             |
+| dagannoth_rex                     | 64    | 39                             |
+| dagannoth_supreme                 | 65    | 40                             |
+| deranged_archaeologist            | 66    | 41                             |
+| doom_of_mokhaiotl                 | 67    | 42                             |
+| duke_sucellus                     | 68    | 43                             |
+| general_graardor                  | 69    | 44                             |
+| giant_mole                        | 70    | 45                             |
+| grotesque_guardians               | 71    | 46                             |
+| hespori                           | 72    | 47                             |
+| kalphite_queen                    | 73    | 48                             |
+| king_black_dragon                 | 74    | 49                             |
+| kraken                            | 75    | 50                             |
+| kree_arra                         | 76    | 51                             |
+| kril_tsutsaroth                   | 77    | 52                             |
+| lunar_chests                      | 78    | 53                             |
+| mad_angel                         | 79    | 54                             |
+| maggot_king                       | 80    | 55                             |
+| mimic                             | 81    | 56                             |
+| nex                               | 82    | 57                             |
+| nightmare                         | 83    | 58                             |
+| phosanis_nightmare                | 84    | 59                             |
+| obor                              | 85    | 60                             |
+| phantom_muspah                    | 86    | 61                             |
+| sarachnis                         | 87    | 62                             |
+| scorpia                           | 88    | 63                             |
+| scurrius                          | 89    | 64                             |
+| shellbane_gryphon                 | 90    | 65                             |
+| skotizo                           | 91    | 66                             |
+| sol_heredit                       | 92    | 67                             |
+| spindel                           | 93    | 68                             |
+| tempoross                         | 94    | 69                             |
+| the_gauntlet                      | 95    | 70                             |
+| the_corrupted_gauntlet            | 96    | 71                             |
+| the_hueycoatl                     | 97    | 72                             |
+| the_leviathan                     | 98    | 73                             |
+| the_royal_titans                  | 99    | 74                             |
+| the_whisperer                     | 100   | 75                             |
+| theatre_of_blood                  | 101   | 76                             |
+| theatre_of_blood_hard_mode        | 102   | 77                             |
+| the_fractured_archive             | 103   | 78                             |
+| thermonuclear_smoke_devil         | 104   | 79                             |
+| tombs_of_amascut                  | 105   | 80                             |
+| tombs_of_amascut_expert_mode      | 106   | 81                             |
+| tzkal_zuk                         | 107   | 82                             |
+| tztok_jad                         | 108   | 83                             |
+| vardorvis                         | 109   | 84                             |
+| venenatis                         | 110   | 85                             |
+| vet_ion                           | 111   | 86                             |
+| vorkath                           | 112   | 87                             |
+| wintertodt                        | 113   | 88                             |
+| yama                              | 114   | 89                             |
+| zalcano                           | 115   | 90                             |
+| zulrah                            | 116   | 91                             |
 
 ## Development
 

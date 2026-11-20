@@ -105,7 +105,7 @@ class OSRSBase(object):
             try:
                 response = requests.get(url, params=params, headers=headers, timeout=timeout)
                 if response.status_code == 404:
-                    raise ValueError("No data loaded! Player not found on the target hiscores.")
+                    raise ValueError("Player not found on the target hiscores.")
                 response.raise_for_status()
                 return response
             except requests.RequestException as err:

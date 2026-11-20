@@ -1,6 +1,6 @@
 import time
 from addict import Dict
-from .resources.categories import default_optional_ranks, normalize_name
+from .resources.categories import default_boss_ranks, default_optional_ranks, normalize_name
 from .resources.utils import OSRSXp
 from .base import OSRSBase
 
@@ -69,9 +69,13 @@ class Highscores(OSRSBase):
             skill[name] = info
             setattr(self, name, Dict(info))
 
+        # The hiscores list minigames/activities before bosses, so an entry this library doesn't know yet is
+        # treated as a minigame until the first known boss has been seen.
+        seen_boss = False
         for entry in self.data.get('activities', []):
             name = normalize_name(entry['name'])
-            if name in default_optional_ranks:
+            seen_boss = seen_boss or name in default_boss_ranks
+            if name in default_optional_ranks or (not seen_boss and name not in default_boss_ranks):
                 info = {
                     'rank': str(entry['rank']),
                     'score': str(entry['score']),
