@@ -29,6 +29,7 @@ default_skills = [
 ]
 
 default_optional_ranks = [
+    "grid_points",
     "league_points",
     "deadman_points",
     "bounty_hunter_hunter",
@@ -85,6 +86,8 @@ default_boss_ranks = [
     "kree_arra",
     "kril_tsutsaroth",
     "lunar_chests",
+    "mad_angel",
+    "maggot_king",
     "mimic",
     "nex",
     "nightmare",
@@ -107,6 +110,7 @@ default_boss_ranks = [
     "the_whisperer",
     "theatre_of_blood",
     "theatre_of_blood_hard_mode",
+    "the_fractured_archive",
     "thermonuclear_smoke_devil",
     "tombs_of_amascut",
     "tombs_of_amascut_expert_mode",
